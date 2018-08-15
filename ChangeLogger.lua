@@ -16,6 +16,7 @@ local settings = { -- These are the default settings. They can be overwritten if
 	numReleases = 1,
 	outputFile = "CHANGES.MD",
 }
+local changes = {} -- Will contain the changelog entries, referenced by their tag (used as key)
 local tags = {} -- Will contain the ordered list of tags (so the newest ones can be found with ease)
 
 -- Loads the inputFile stored in the script's settings and returns them as a Lua table (I know, technically it isn't really parsing it, but it works out the same way)
@@ -41,7 +42,7 @@ function CL.Run(args)
 	print("\Output file: " .. settings["outputFile"])
 	print("\Changelog format: " .. settings["mode"])
 	
-	local changes = ParseInputFile()
+	changes = ParseInputFile()
 	
 	-- Discover tags and add them to the ordered changelog list (so the newest ones can be found)
 	print("\nFound the following changelogs:\n")
