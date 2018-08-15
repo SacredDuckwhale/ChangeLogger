@@ -2,6 +2,13 @@
 local argparse = require "argparse"
 
 
+-- Upvalues
+local print = print
+local pairs = pairs
+local assert = assert
+local dofile = dofile
+
+
 -- Locals
 local CL = {}
 local settings = { -- These are the default settings. They can be overwritten if CLI arguments were supplied
