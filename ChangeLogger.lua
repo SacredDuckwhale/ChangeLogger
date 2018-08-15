@@ -60,7 +60,7 @@ function CL.Run(args)
 	end
 	
 	print("\nDiscovered " .. #tags .. " tagged versions. Sorting them now...\n")
-	table.sort(tags)
+	table.sort(tags, function(a, b) return a > b end)
 	for index, tag in ipairs(tags) do
 		print("(" .. index .. ")", tag)
 	end
