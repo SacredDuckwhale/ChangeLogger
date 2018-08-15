@@ -15,5 +15,39 @@ Please open an issue and I will add support for it!*
 
 Shortcuts: -o -m -n (for the three optional parameters, respectively)
 
+## Input Format
+
+Currently, CL supports only a specific format written in Lua. This allows the changelogs to be used directly in other Lua programs, for example to display them inside the program they are shipped (with for users who haven't bothered with reading the actual changelog file).
+
+Details on this format are as follows:
+ 
+* For the time being, the input file must contain a Lua function that returns the changeLogs table
+* Valid keys for this table are: additions, fixes, changes, notes
+* Either of these can be omitted, as long as there exists at least one entry
+* The changeLogs table can be named arbitrarily. It just needs to be valid, and contain entries in the specified format that CL understands
+
+I'm aware these constraints are somewhat inconvenient, so it will likely be improved upon in the future.	
+
+Example:
+
+    changes = { ["r42"] = {
+		additions = {
+			"Added some cool stuff",
+		},
+		fixes = {
+			"Fixed a horrible bug that would end the world through dividing by zero",
+		},
+		changes = {
+			"Everything was changed. New is ALWAYS better!",
+		},
+		notes = 
+			"This Curse/Twitch \"feature\" caused many bug reports and offers little tangible benefit, as it was often done in error or automatically by the Twitch client; I ultimately chose to disable it in order to reduce the time spent on providing support instead of working on bugfixes or new features"
+		},
+	}
+	
+	return changes
+
+Please note the outer structure allowing the file to be executed as a Lua function (which returns the table of changelogs).
+
 ## Required Libraries (externals)
 * argparse: 	https://github.com/mpeterv/argparse
