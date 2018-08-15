@@ -36,8 +36,8 @@ local function WriteOutputFile()
 	print("\nWriting " .. settings.outputFile .. " in mode = " .. settings.mode .. "...\n")
 	
 	-- Initialize by opening a stream to the outputFile
+	local file = assert(io.open(settings.outputFile, "w"), "Error opening output file!")
 
-	
 	local outputStrings = {} -- Will be concatenated when this is done	
 	
 	-- Write individual tags
@@ -87,9 +87,13 @@ local function WriteOutputFile()
 	local outputString = tconcat(outputStrings, "\n")
 	print("\nAssembled output string:\n\n" .. outputString)
 	
+	-- Write the results to the specified output file
+	print("Writing to output file...")
+	file:write(outputString)
 	
 	-- Finalize by closing the open file connection
-	
+	file:close()
+	print("Closed output file - all done!")
 	
 	
 end
