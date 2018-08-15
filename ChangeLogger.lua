@@ -7,7 +7,10 @@ local print = print
 local pairs = pairs
 local assert = assert
 local dofile = dofile
-
+local tonumber = tonumber
+local format = string.format
+local tconcat = table.concat
+local tinsert = table.insert
 
 -- Locals
 local CL = {}
