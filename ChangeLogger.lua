@@ -17,6 +17,14 @@ local settings = { -- These are the default settings. They can be overwritten if
 	outputFile = "CHANGES.MD",
 }
 
+-- Loads the inputFile stored in the script's settings and returns them as a Lua table (I know, technically it isn't really parsing it, but it works out the same way)
+local function ParseInputFile()
+
+	local changes = assert(dofile(settings.inputFile), "Failed to load input file!")
+	return changes
+	
+end
+
 -- Script execution always starts with this
 function CL.Run(args)
 
@@ -31,6 +39,8 @@ function CL.Run(args)
 	print("\Input file: " .. settings["inputFile"])
 	print("\Output file: " .. settings["outputFile"])
 	print("\Changelog format: " .. settings["mode"])
+	
+	local changes = ParseInputFile()
 	
 end
 
