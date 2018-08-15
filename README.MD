@@ -6,7 +6,7 @@
 
 ## Usage
 
-    lua ChangeLogger.lua "input.lua" --outputFile="test\changes.md" --mode="markdown" --numReleases=3
+    lua ChangeLogger.lua "input.lua" --outputFile="output\changes.md" --mode="markdown" --numReleases=3
 
 This runs the script and tells it to parse the file *input.lua*, saving to *output\changes.md* a changelog written in *markdown* format, which includes changes from the last *three* releases CL could find.
 
