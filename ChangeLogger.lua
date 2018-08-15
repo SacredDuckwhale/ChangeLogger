@@ -42,6 +42,18 @@ function CL.Run(args)
 	
 	local changes = ParseInputFile()
 	
+	print("\Found some changelogs:\n")
+	for tag, changeLog in pairs(changes) do
+		
+		local numChanges = changeLog.changes and #changeLog.changes or 0
+		local numAdditions = changeLog.additions and #changeLog.additions or 0
+		local numFixes = changeLog.fixes and #changeLog.fixes or 0
+		local hasNotes = changeLog.notes
+		
+		print("Tag: " .. tag .. " - " .. numChanges .. " Changes, " .. numAdditions .. " Additions, " .. numFixes .. " Fixes - Notes: " .. (hasNotes and "Yes" or "No"))
+
+	end
+	
 end
 
 
