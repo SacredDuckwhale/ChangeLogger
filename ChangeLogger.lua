@@ -20,6 +20,11 @@ function CL.Run(args)
 		settings[k] = v -- If some settings were invalid, they just won't have any effect. Yes, I AM too lazy right now for sanity checks etc.
 	end
 
+	print("\nRunning script with the following parameters...\n")
+	print("\Input file: " .. settings["inputFile"])
+	print("\Output file: " .. settings["outputFile"])
+	print("\Changelog format: " .. settings["mode"])
+	
 end
 
 
