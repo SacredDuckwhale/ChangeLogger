@@ -19,6 +19,35 @@ local settings = { -- These are the default settings. They can be overwritten if
 local changes = {} -- Will contain the changelog entries, referenced by their tag (used as key)
 local tags = {} -- Will contain the ordered list of tags (so the newest ones can be found with ease)
 
+
+-- Writes the outputFile according to the script's settings
+-- Note: Will only function if tags have been added (and sorted) first
+local function WriteOutputFile()
+	
+	print("\nWriting " .. settings.outputFile .. " in mode = " .. settings.mode .. "...\n")
+	
+	-- Initialize by opening a stream to the outputFile
+	
+	
+	-- Write individual tags
+	local numWritten = 0
+	for index, tag in ipairs(tags) do -- Write as many notes as the settings dictate
+
+		if numWritten == tonumber(settings.numReleases) then -- Wrote the required number of changes already
+			print("\nStopping after " .. numWritten .. " tags have been written. Finalizing...")
+			break
+		end
+
+		numWritten = numWritten + 1
+		
+	end
+	
+	-- Finalize by closing the open file connection
+	
+	
+	
+end
+
 -- Loads the inputFile stored in the script's settings and returns them as a Lua table (I know, technically it isn't really parsing it, but it works out the same way)
 local function ParseInputFile()
 
@@ -68,6 +97,8 @@ function CL.Run(args)
 	
 	print("\nFinished sorting tags!")
 	
+	WriteOutputFile()
+
 end
 
 
