@@ -18,6 +18,12 @@ local settings = { -- These are the default settings. They can be overwritten if
 	mode = "markdown",
 	numReleases = 1,
 	outputFile = "CHANGES.MD",
+	orderedCategories = { -- Predefined order of the given changelog entry types (TODO: Allow changing this?)
+		[1] = "additions",
+		[2] = "changes",
+		[3] = "fixes",
+		[4] = "notes"
+	},
 }
 local changes = {} -- Will contain the changelog entries, referenced by their tag (used as key)
 local tags = {} -- Will contain the ordered list of tags (so the newest ones can be found with ease)
@@ -30,20 +36,57 @@ local function WriteOutputFile()
 	print("\nWriting " .. settings.outputFile .. " in mode = " .. settings.mode .. "...\n")
 	
 	-- Initialize by opening a stream to the outputFile
+
 	
+	local outputStrings = {} -- Will be concatenated when this is done	
 	
 	-- Write individual tags
-	local numWritten = 0
+	--	Format: <tag>:\n\n<additions>\n<changes>\n<fixes>\n<notes>\n
+	local numTagsWritten = 0
 	for index, tag in ipairs(tags) do -- Write as many notes as the settings dictate
 
-		if numWritten == tonumber(settings.numReleases) then -- Wrote the required number of changes already
-			print("\nStopping after " .. numWritten .. " tags have been written. Finalizing...")
+		if numTagsWritten == tonumber(settings.numReleases) then -- Wrote the required number of changes already
+			print("\nStopping after " .. numTagsWritten .. " tags have been written. Finalizing...")
 			break
 		end
 
-		numWritten = numWritten + 1
+		print("(" .. index .. ") Adding changes for tag: " .. tag .. "\n")
+
+		local changeLog = changes[tag]
+
+		-- Add tag info
+		tinsert(outputStrings, tag .. ":\n")
+		
+		-- Add individual entries (in order)
+		for order, category in ipairs(settings.orderedCategories) do -- Add entries in the correct order
+			--print(order, category)
+			local entries = changeLog[category]
+			if entries then -- Add this entry
+			
+				print("Preparing to write "  .. #entries .. " " .. category .. "...")
+				for index, entry in ipairs(entries) do -- Write notes in the original order
+					tinsert(outputStrings, "\t" .. entry)
+				end			
+				
+				-- Add line break between entries
+				tinsert(outputStrings, "") -- separator is set to \n at the end, so this will only add one line break and not two
+				
+			end -- Skip types that have no entry for this tag
+			
+		end
+
+		-- Add line break between tags
+		tinsert(outputStrings, "\n") -- Will add two line breaks, since the separator (below) is also a \n symbol
+		
+		-- Keep count (used for the numReleases parameter)
+		numTagsWritten = numTagsWritten + 1
 		
 	end
+	
+	-- Concatenate everything
+	local outputString = tconcat(outputStrings, "\n")
+	print("\nAssembled output string:\n\n" .. outputString)
+	
 	
 	-- Finalize by closing the open file connection
 	
