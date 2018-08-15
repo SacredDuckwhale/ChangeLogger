@@ -7,7 +7,10 @@ local print = print
 local pairs = pairs
 local assert = assert
 local dofile = dofile
-
+local tonumber = tonumber
+local format = string.format
+local tconcat = table.concat
+local tinsert = table.insert
 
 -- Locals
 local CL = {}
@@ -15,8 +18,85 @@ local settings = { -- These are the default settings. They can be overwritten if
 	mode = "markdown",
 	numReleases = 1,
 	outputFile = "CHANGES.MD",
+	orderedCategories = { -- Predefined order of the given changelog entry types (TODO: Allow changing this?)
+		[1] = "additions",
+		[2] = "changes",
+		[3] = "fixes",
+		[4] = "notes"
+	},
 }
+local changes = {} -- Will contain the changelog entries, referenced by their tag (used as key)
 local tags = {} -- Will contain the ordered list of tags (so the newest ones can be found with ease)
+
+
+-- Writes the outputFile according to the script's settings
+-- Note: Will only function if tags have been added (and sorted) first
+local function WriteOutputFile()
+	
+	print("\nWriting " .. settings.outputFile .. " in mode = " .. settings.mode .. "...\n")
+	
+	-- Initialize by opening a stream to the outputFile
+	local file = assert(io.open(settings.outputFile, "w"), "Error opening output file!")
+
+	local outputStrings = {} -- Will be concatenated when this is done	
+	
+	-- Write individual tags
+	--	Format: <tag>:\n\n<additions>\n<changes>\n<fixes>\n<notes>\n
+	local numTagsWritten = 0
+	for index, tag in ipairs(tags) do -- Write as many notes as the settings dictate
+
+		if numTagsWritten == tonumber(settings.numReleases) then -- Wrote the required number of changes already
+			print("\nStopping after " .. numTagsWritten .. " tags have been written. Finalizing...")
+			break
+		end
+
+		print("(" .. index .. ") Adding changes for tag: " .. tag .. "\n")
+
+		local changeLog = changes[tag]
+
+		-- Add tag info
+		tinsert(outputStrings, tag .. ":\n")
+		
+		-- Add individual entries (in order)
+		for order, category in ipairs(settings.orderedCategories) do -- Add entries in the correct order
+			--print(order, category)
+			local entries = changeLog[category]
+			if entries then -- Add this entry
+			
+				print("Preparing to write "  .. #entries .. " " .. category .. "...")
+				for index, entry in ipairs(entries) do -- Write notes in the original order
+					tinsert(outputStrings, "\t" .. entry)
+				end			
+				
+				-- Add line break between entries
+				tinsert(outputStrings, "") -- separator is set to \n at the end, so this will only add one line break and not two
+				
+			end -- Skip types that have no entry for this tag
+			
+		end
+
+		-- Add line break between tags
+		tinsert(outputStrings, "") -- Will add two line breaks, since the separator (below) is also a \n symbol
+		
+		-- Keep count (used for the numReleases parameter)
+		numTagsWritten = numTagsWritten + 1
+		
+	end
+	
+	-- Concatenate everything
+	local outputString = tconcat(outputStrings, "\n")
+	print("\nAssembled output string:\n\n" .. outputString)
+	
+	-- Write the results to the specified output file
+	print("Writing to output file...")
+	file:write(outputString)
+	
+	-- Finalize by closing the open file connection
+	file:close()
+	print("Closed output file - all done!")
+	
+	
+end
 
 -- Loads the inputFile stored in the script's settings and returns them as a Lua table (I know, technically it isn't really parsing it, but it works out the same way)
 local function ParseInputFile()
@@ -41,7 +121,7 @@ function CL.Run(args)
 	print("\Output file: " .. settings["outputFile"])
 	print("\Changelog format: " .. settings["mode"])
 	
-	local changes = ParseInputFile()
+	changes = ParseInputFile()
 	
 	-- Discover tags and add them to the ordered changelog list (so the newest ones can be found)
 	print("\nFound the following changelogs:\n")
@@ -60,13 +140,15 @@ function CL.Run(args)
 	end
 	
 	print("\nDiscovered " .. #tags .. " tagged versions. Sorting them now...\n")
-	table.sort(tags)
+	table.sort(tags, function(a, b) return a > b end)
 	for index, tag in ipairs(tags) do
 		print("(" .. index .. ")", tag)
 	end
 	
 	print("\nFinished sorting tags!")
 	
+	WriteOutputFile()
+
 end
 
 
