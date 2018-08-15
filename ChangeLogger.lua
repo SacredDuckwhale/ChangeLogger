@@ -16,6 +16,7 @@ local settings = { -- These are the default settings. They can be overwritten if
 	numReleases = 1,
 	outputFile = "CHANGES.MD",
 }
+local tags = {} -- Will contain the ordered list of tags (so the newest ones can be found with ease)
 
 -- Loads the inputFile stored in the script's settings and returns them as a Lua table (I know, technically it isn't really parsing it, but it works out the same way)
 local function ParseInputFile()
@@ -42,7 +43,8 @@ function CL.Run(args)
 	
 	local changes = ParseInputFile()
 	
-	print("\Found some changelogs:\n")
+	-- Discover tags and add them to the ordered changelog list (so the newest ones can be found)
+	print("\nFound the following changelogs:\n")
 	for tag, changeLog in pairs(changes) do
 		
 		local numChanges = changeLog.changes and #changeLog.changes or 0
@@ -51,8 +53,19 @@ function CL.Run(args)
 		local hasNotes = changeLog.notes
 		
 		print("Tag: " .. tag .. " - " .. numChanges .. " Changes, " .. numAdditions .. " Additions, " .. numFixes .. " Fixes - Notes: " .. (hasNotes and "Yes" or "No"))
-
+		
+		-- Add tag to list so it can be sorted
+		tags[#tags+1] = tag
+		
 	end
+	
+	print("\nDiscovered " .. #tags .. " tagged versions. Sorting them now...\n")
+	table.sort(tags)
+	for index, tag in ipairs(tags) do
+		print("(" .. index .. ")", tag)
+	end
+	
+	print("\nFinished sorting tags!")
 	
 end
 
