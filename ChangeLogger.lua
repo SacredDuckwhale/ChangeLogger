@@ -11,6 +11,7 @@ local tonumber = tonumber
 local format = string.format
 local tconcat = table.concat
 local tinsert = table.insert
+local tremove = table.remove
 
 -- Locals
 local CL = {}
@@ -82,6 +83,9 @@ local function WriteOutputFile()
 		numTagsWritten = numTagsWritten + 1
 		
 	end
+	
+	-- Remove final separator (as it's not needed at the end of the file)
+	tremove(outputStrings)
 	
 	-- Concatenate everything
 	local outputString = tconcat(outputStrings, "\n")
