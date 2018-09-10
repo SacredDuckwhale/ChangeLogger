@@ -68,7 +68,7 @@ local function WriteOutputFile()
 				if category == "issues" then tinsert(outputStrings, "Known Issues:") end
 				print("Preparing to write "  .. #entries .. " " .. category .. "...")
 				for index, entry in ipairs(entries) do -- Write notes in the original order
-					tinsert(outputStrings, "\t" .. entry)
+					tinsert(outputStrings, ((index > 1) and "<br>" or "> ") .. entry)
 				end			
 				
 				-- Add line break between entries
