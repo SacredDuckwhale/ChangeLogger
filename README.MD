@@ -17,16 +17,16 @@ Shortcuts: -o -m -n (for the three optional parameters, respectively)
 
 ## Input Format
 
-Currently, CL supports only a specific format written in Lua. This allows the changelogs to be used directly in other Lua programs, for example to display them inside the program they are shipped (with for users who haven't bothered with reading the actual changelog file).
+Currently, CL supports only a specific format written in Lua. This allows the changelogs to be used directly in other Lua programs, for example to display them inside the program they are shipped with (for users who haven't bothered with reading the actual changelog file that would usually be included as well).
 
 Details on this format are as follows:
  
-* For the time being, the input file must contain a Lua function that returns the changeLogs table
-* Valid keys for this table are: additions, fixes, changes, notes
-* Either of these can be omitted, as long as there exists at least one entry
+* For the time being, the input file must contain a Lua function that returns the changeLogs table (to be used with Lua's [loadfile](https://www.lua.org/pil/8.html) function)
+* Valid keys for this table are: additions, fixes, changes, notes, isses
+* Either of these can be omitted, as long as there exists at least one entry - surely creating a changelog would be pointless if nothing has changed, after all
 * The changeLogs table can be named arbitrarily. It just needs to be valid, and contain entries in the specified format that CL understands
 
-I'm aware these constraints are somewhat inconvenient, so it will likely be improved upon in the future.	
+I'm aware these constraints are somewhat inconvenient, so it will likely be improved upon in the future. Like, eventually. Maybe. Possibly. You know how it is with these side projects...
 
 Example:
 
