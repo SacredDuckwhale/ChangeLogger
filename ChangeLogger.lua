@@ -64,7 +64,8 @@ local function WriteOutputFile()
 			--print(order, category)
 			local entries = changeLog[category]
 			if entries then -- Add this entry
-			
+				if category == "notes" then tinsert(outputStrings, "Developer Notes:") end
+				if category == "issues" then tinsert(outputStrings, "Known Issues:") end
 				print("Preparing to write "  .. #entries .. " " .. category .. "...")
 				for index, entry in ipairs(entries) do -- Write notes in the original order
 					tinsert(outputStrings, "\t" .. entry)
