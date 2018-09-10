@@ -41,7 +41,10 @@ Example:
 			"Everything was changed. New is ALWAYS better!",
 		},
 		notes = 
-			"This Curse/Twitch \"feature\" caused many bug reports and offers little tangible benefit, as it was often done in error or automatically by the Twitch client; I ultimately chose to disable it in order to reduce the time spent on providing support instead of working on bugfixes or new features"
+			"Some random developer notes. Not like anybody wants to read them, anyway...",
+		},
+		issues = {
+			"It's broken! All of it. How could you let this happen?",
 		},
 	}
 	
