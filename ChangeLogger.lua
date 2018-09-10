@@ -76,7 +76,7 @@ local function WriteOutputFile()
 		end
 
 		-- Add line break between tags
-		tinsert(outputStrings, "") -- Will add two line breaks, since the separator (below) is also a \n symbol
+		tinsert(outputStrings, "-----\n") -- Will add two line breaks, since the separator (below) is also a \n symbol
 		
 		-- Keep count (used for the numReleases parameter)
 		numTagsWritten = numTagsWritten + 1
