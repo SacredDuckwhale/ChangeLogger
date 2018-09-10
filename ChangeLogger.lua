@@ -57,7 +57,7 @@ local function WriteOutputFile()
 		local changeLog = changes[tag]
 
 		-- Add tag info
-		tinsert(outputStrings, tag .. ":\n")
+		tinsert(outputStrings, "**" .. tag .. ":**\n")
 		
 		-- Add individual entries (in order)
 		for order, category in ipairs(settings.orderedCategories) do -- Add entries in the correct order
