@@ -23,7 +23,8 @@ local settings = { -- These are the default settings. They can be overwritten if
 		[1] = "additions",
 		[2] = "changes",
 		[3] = "fixes",
-		[4] = "notes"
+		[4] = "issues",
+		[5] = "notes"
 	},
 }
 local changes = {} -- Will contain the changelog entries, referenced by their tag (used as key)
