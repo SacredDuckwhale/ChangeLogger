@@ -30,7 +30,8 @@ I'm aware these constraints are somewhat inconvenient, so it will likely be impr
 
 Example:
 
-    changes = { ["r42"] = {
+    changeLog = {
+	["r42"] = {
 		additions = {
 			"Added some cool stuff",
 		},
@@ -48,7 +49,7 @@ Example:
 		},
 	}
 	
-	return changes
+	return changeLog
 
 Please note the outer structure allowing the file to be executed as a Lua function (which returns the table of changelogs).
 
