@@ -22,7 +22,7 @@ Currently, CL supports only a specific format written in Lua. This allows the ch
 Details on this format are as follows:
  
 * For the time being, the input file must contain a Lua function that returns the changeLogs table (to be used with Lua's [loadfile](https://www.lua.org/pil/8.html) function)
-* Valid keys for this table are: additions, fixes, changes, notes, isses
+* Valid keys for this table are: additions, fixes, changes, notes, issues
 * Either of these can be omitted, as long as there exists at least one entry - surely creating a changelog would be pointless if nothing has changed, after all
 * The changeLogs table can be named arbitrarily. It just needs to be valid, and contain entries in the specified format that CL understands
 
