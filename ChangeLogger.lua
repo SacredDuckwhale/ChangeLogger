@@ -24,7 +24,8 @@ local settings = { -- These are the default settings. They can be overwritten if
 		[2] = "changes",
 		[3] = "fixes",
 		[4] = "issues",
-		[5] = "notes"
+		[5] = "notes",
+		[6] = "contributors"
 	},
 }
 local changes = {} -- Will contain the changelog entries, referenced by their tag (used as key)
@@ -66,6 +67,7 @@ local function WriteOutputFile()
 			if entries then -- Add this entry
 				if category == "notes" then tinsert(outputStrings, "Developer Notes:") end
 				if category == "issues" then tinsert(outputStrings, "Known Issues:") end
+				if category == "contributors" then tinsert(outputStrings, "Contributors (in alphabetical order):") end
 				print("Preparing to write "  .. #entries .. " " .. category .. "...")
 				for index, entry in ipairs(entries) do -- Write notes in the original order
 					tinsert(outputStrings, ((index > 1) and "<br>" or "> ") .. entry)
