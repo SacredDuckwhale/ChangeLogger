@@ -35,14 +35,14 @@ local tags = {} -- Will contain the ordered list of tags (so the newest ones can
 -- Writes the outputFile according to the script's settings
 -- Note: Will only function if tags have been added (and sorted) first
 local function WriteOutputFile()
-	
+
 	print("\nWriting " .. settings.outputFile .. " in mode = " .. settings.mode .. "...\n")
-	
+
 	-- Initialize by opening a stream to the outputFile
 	local file = assert(io.open(settings.outputFile, "w"), "Error opening output file!")
 
-	local outputStrings = {} -- Will be concatenated when this is done	
-	
+	local outputStrings = {} -- Will be concatenated when this is done
+
 	-- Write individual tags
 	--	Format: <tag>:\n\n<additions>\n<changes>\n<fixes>\n<notes>\n
 	local numTagsWritten = 0
@@ -59,7 +59,7 @@ local function WriteOutputFile()
 
 		-- Add tag info
 		tinsert(outputStrings, "**" .. tag .. ":**\n")
-		
+
 		-- Add individual entries (in order)
 		for order, category in ipairs(settings.orderedCategories) do -- Add entries in the correct order
 			--print(order, category)
@@ -71,39 +71,39 @@ local function WriteOutputFile()
 				print("Preparing to write "  .. #entries .. " " .. category .. "...")
 				for index, entry in ipairs(entries) do -- Write notes in the original order
 					tinsert(outputStrings, ((index > 1) and "<br>" or "> ") .. entry)
-				end			
-				
+				end
+
 				-- Add line break between entries
 				tinsert(outputStrings, "") -- separator is set to \n at the end, so this will only add one line break and not two
-				
+
 			end -- Skip types that have no entry for this tag
-			
+
 		end
 
 		-- Add line break between tags
 		tinsert(outputStrings, "-----\n") -- Will add two line breaks, since the separator (below) is also a \n symbol
-		
+
 		-- Keep count (used for the numReleases parameter)
 		numTagsWritten = numTagsWritten + 1
-		
+
 	end
-	
+
 	-- Remove final separator (as it's not needed at the end of the file)
 	tremove(outputStrings)
-	
+
 	-- Concatenate everything
 	local outputString = tconcat(outputStrings, "\n")
 	print("\nAssembled output string:\n\n" .. outputString)
-	
+
 	-- Write the results to the specified output file
 	print("Writing to output file...")
 	file:write(outputString)
-	
+
 	-- Finalize by closing the open file connection
 	file:close()
 	print("Closed output file - all done!")
-	
-	
+
+
 end
 
 -- Loads the inputFile stored in the script's settings and returns them as a Lua table (I know, technically it isn't really parsing it, but it works out the same way)
@@ -111,7 +111,7 @@ local function ParseInputFile()
 
 	local changes = assert(dofile(settings.inputFile), "Failed to load input file!")
 	return changes
-	
+
 end
 
 -- Script execution always starts with this
@@ -125,36 +125,36 @@ function CL.Run(args)
 	end
 
 	print("\nRunning script with the following parameters...\n")
-	print("\Input file: " .. settings["inputFile"])
-	print("\Output file: " .. settings["outputFile"])
-	print("\Changelog format: " .. settings["mode"])
-	
+	print("\nInput file: " .. settings["inputFile"])
+	print("\nOutput file: " .. settings["outputFile"])
+	print("\nChangelog format: " .. settings["mode"])
+
 	changes = ParseInputFile()
-	
+
 	-- Discover tags and add them to the ordered changelog list (so the newest ones can be found)
 	print("\nFound the following changelogs:\n")
 	for tag, changeLog in pairs(changes) do
-		
+
 		local numChanges = changeLog.changes and #changeLog.changes or 0
 		local numAdditions = changeLog.additions and #changeLog.additions or 0
 		local numFixes = changeLog.fixes and #changeLog.fixes or 0
 		local hasNotes = changeLog.notes
-		
+
 		print("Tag: " .. tag .. " - " .. numChanges .. " Changes, " .. numAdditions .. " Additions, " .. numFixes .. " Fixes - Notes: " .. (hasNotes and "Yes" or "No"))
-		
+
 		-- Add tag to list so it can be sorted
 		tags[#tags+1] = tag
-		
+
 	end
-	
+
 	print("\nDiscovered " .. #tags .. " tagged versions. Sorting them now...\n")
 	table.sort(tags, function(a, b) return a > b end)
 	for index, tag in ipairs(tags) do
 		print("(" .. index .. ")", tag)
 	end
-	
+
 	print("\nFinished sorting tags!")
-	
+
 	WriteOutputFile()
 
 end
