@@ -28,6 +28,15 @@ local settings = { -- These are the default settings. They can be overwritten if
 		[6] = "contributors"
 	},
 }
+
+local displayTexts = {
+	["additions"] = "Additions",
+	["changes"] = "Changes",
+	["fixes"] = "Fixes",
+	["issues"] = "Known Issues",
+	["notes"] = "Developer Notes",
+	["contributors"] = "Contributors (in alphabetical order)",
+}
 local changes = {} -- Will contain the changelog entries, referenced by their tag (used as key)
 local tags = {} -- Will contain the ordered list of tags (so the newest ones can be found with ease)
 
@@ -65,9 +74,10 @@ local function WriteOutputFile()
 			--print(order, category)
 			local entries = changeLog[category]
 			if entries then -- Add this entry
-				if category == "notes" then tinsert(outputStrings, "Developer Notes:") end
-				if category == "issues" then tinsert(outputStrings, "Known Issues:") end
-				if category == "contributors" then tinsert(outputStrings, "Contributors (in alphabetical order):") end
+
+				local displayText = displayTexts[category] or "Misc"
+				tinsert(outputStrings, displayText .. ":")
+
 				print("Preparing to write "  .. #entries .. " " .. category .. "...")
 				for index, entry in ipairs(entries) do -- Write notes in the original order
 					tinsert(outputStrings, ((index > 1) and "<br>" or "> ") .. entry)
